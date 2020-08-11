@@ -4,6 +4,10 @@ import com.squareup.moshi.Json;
 
 public class Movie {
 
+    public static final String BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342";
+    private static final String BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780";
+
+    private static final String TAG = "Movie";
     private String id;
     private String overview;
     @Json(name = "release_date")
@@ -12,6 +16,7 @@ public class Movie {
     private String posterPath;
     @Json(name = "backdrop_path")
     private String backdropPath;
+    private String title;
     @Json(name = "vote_average")
     private double voteAverage;
 
@@ -40,7 +45,7 @@ public class Movie {
     }
 
     public String getPosterPath() {
-        return posterPath;
+        return BASE_POSTER_PATH + posterPath;
     }
 
     public void setPosterPath(String posterPath) {
@@ -48,7 +53,7 @@ public class Movie {
     }
 
     public String getBackdropPath() {
-        return backdropPath;
+        return BASE_BACKDROP_PATH+backdropPath;
     }
 
     public void setBackdropPath(String backdropPath) {
@@ -63,14 +68,23 @@ public class Movie {
         this.voteAverage = voteAverage;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
                 "id='" + id + '\'' +
                 ", overview='" + overview + '\'' +
-                ", releaseDare='" + releaseDate + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
                 ", posterPath='" + posterPath + '\'' +
                 ", backdropPath='" + backdropPath + '\'' +
+                ", title='" + title + '\'' +
                 ", voteAverage=" + voteAverage +
                 '}';
     }

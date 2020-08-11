@@ -1,7 +1,6 @@
 package com.rz.movieguide.model;
 
 public class Review {
-
     private String id;
     private String author;
     private String content;
