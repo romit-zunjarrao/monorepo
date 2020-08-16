@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,7 +29,7 @@ import com.rz.movieguide.model.Video;
 import com.rz.movieguide.viewmodel.MovieListViewModel;
 
 import java.util.List;
-import java.util.zip.Inflater;
+
 
 public class MovieDetailsFragment extends Fragment {
     private static final String TAG = "MovieDetailsFragment";
@@ -152,7 +150,6 @@ public class MovieDetailsFragment extends Fragment {
             }
         }
     }
-
 
     public void fillReviewDetails(List<Review> reviews){
         if(reviews.isEmpty()){

@@ -1,10 +1,10 @@
 package com.rz.movieguide.view.list;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,19 +49,32 @@ public class MovieListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.movie_list);
-        MovieListAdapter adapter = new MovieListAdapter(movies,this);
+        MovieListAdapter adapter = new MovieListAdapter(movies, this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         movieListViewModel = ViewModelProviders.of(requireActivity()).get(MovieListViewModel.class);
         movieListViewModel.getMovieList().observe(this, movies -> {
             this.movies.addAll(movies);
             adapter.notifyDataSetChanged();
         });
+
+        movieListViewModel.getListType().observe(this,changed -> {
+            this.movies.clear();
+            adapter.notifyDataSetChanged();
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (gridLayoutManager.findFirstVisibleItemPosition() + 10 == movies.size() && gridLayoutManager.findFirstVisibleItemPosition() != 0)
+                    movieListViewModel.incrementPageNumber();
+            }
+        });
     }
 
     public void onMovieClicked(Movie movie) {
-        Log.d(TAG,movie.toString());
+        Log.d(TAG, movie.toString());
         movieListViewModel.setSelectedMovie(movie);
     }
-
 }

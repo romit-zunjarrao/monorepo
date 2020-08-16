@@ -15,25 +15,41 @@ public class MovieListViewModel extends ViewModel {
     private MovieRepository movieRepository;
 
 
-    public MovieListViewModel(){
+    public MovieListViewModel() {
         movieRepository = MovieRepository.getMovieRepository();
     }
 
-    public LiveData<List<Movie>> getMovieList(){
+    public LiveData<List<Movie>> getMovieList() {
         return movieRepository.getMovies();
     }
 
-    public void setSelectedMovie(Movie movie){
+    public void setSelectedMovie(Movie movie) {
         movieRepository.setSelectedMovie(movie);
     }
 
-    public LiveData<Movie> getSelectedMovie(){
-      return movieRepository.getSelectedMovie();
+    public LiveData<Movie> getSelectedMovie() {
+        return movieRepository.getSelectedMovie();
     }
 
-    public LiveData<List<Video>> getTrailers(){ return movieRepository.getTrailers();}
+    public LiveData<List<Video>> getTrailers() {
+        return movieRepository.getTrailers();
+    }
 
-    public LiveData<List<Review>> getReviews() { return movieRepository.getReviews();}
+    public LiveData<List<Review>> getReviews() {
+        return movieRepository.getReviews();
+    }
+
+    public void incrementPageNumber() {
+        movieRepository.incrementPageNumber();
+    }
+
+    public void setListType(String type) {
+        movieRepository.setChangedListType(type);
+    }
+
+    public LiveData<Boolean> getListType() {
+        return movieRepository.getChangedListType();
+    }
 
 
 }

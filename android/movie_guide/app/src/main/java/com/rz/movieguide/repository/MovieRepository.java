@@ -28,6 +28,9 @@ public class MovieRepository {
     private MutableLiveData<Movie> selectedMovie = new MutableLiveData<>();
     private MutableLiveData<List<Video>> trailersLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Review>> reviewLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> changedListType = new MutableLiveData<>();
+    private String listType = "popular";
+    private int moviePageNumber = 1;
 
     MovieApi movieApi;
 
@@ -44,11 +47,24 @@ public class MovieRepository {
 
     private void fetchMovieData() {
         Log.d(TAG, "onCreate: ");
-        Call<MovieWrapper> movies = movieApi.popularMovies(5);
+
+        Call<MovieWrapper> movies;
+        switch (this.listType){
+            case "toprated" : movies = movieApi.topRatedMovies(moviePageNumber); break;
+            case "newest" :  movies = movieApi.nowPlaying(moviePageNumber); break;
+            case "popular":
+            default :  movies = movieApi.popularMovies(moviePageNumber); break;
+
+//            case "Favorite" : movieApi.popularMovies(moviePageNumber); break;
+        }
+
+
+//        Call<MovieWrapper> movies = movieApi.popularMovies(moviePageNumber);
         movies.enqueue(new Callback<MovieWrapper>() {
                            @Override
                            public void onResponse(Call<MovieWrapper> call, Response<MovieWrapper> response) {
                                Log.d(TAG, response.toString());
+                               Log.d(TAG, "onResponse: "+listType);
                                Log.d(TAG, response.body().toString());
                                moviesLiveData.setValue(response.body().getMovies());
                            }
@@ -118,6 +134,21 @@ public class MovieRepository {
     public LiveData<List<Video>> getTrailers() {
         fetchTrailer();
         return trailersLiveData;
+    }
+
+    public void incrementPageNumber(){
+        moviePageNumber++;
+        fetchMovieData();
+    }
+
+    public void setChangedListType(String type){
+        this.listType = type;
+        fetchMovieData();
+        this.changedListType.setValue(true);
+    }
+
+    public LiveData<Boolean> getChangedListType(){
+        return this.changedListType;
     }
 
 
