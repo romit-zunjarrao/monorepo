@@ -59,7 +59,7 @@ public class MovieListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
-        movieListViewModel.getListType().observe(this,changed -> {
+        movieListViewModel.getListType().observe(this, changed -> {
             this.movies.clear();
             adapter.notifyDataSetChanged();
         });

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rz.movieguide.R;
 import com.rz.movieguide.model.Movie;
 import com.rz.movieguide.model.Review;
@@ -49,6 +50,8 @@ public class MovieDetailsFragment extends Fragment {
 
     TextView reviewLabel;
     LinearLayout reviewLayout;
+
+    FloatingActionButton favoriteButton;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -85,19 +88,22 @@ public class MovieDetailsFragment extends Fragment {
         reviewLabel = view.findViewById(R.id.review_label);
         reviewLayout = view.findViewById(R.id.reviews);
 
+//        favoriteButton = view.findViewById(R.id.favorite);
+//        favoriteButton.setOnClickListener(handleFavorite());
+
         movieListViewModel = ViewModelProviders.of(requireActivity()).get(MovieListViewModel.class);
         movieListViewModel.getSelectedMovie().observe(this, movie -> {
-           // Log.d(TAG, movie.toString());
+            // Log.d(TAG, movie.toString());
             fillMovieDetails(movie);
         });
 
         movieListViewModel.getTrailers().observe(this, videos -> {
-            Log.d(TAG, "onViewCreated: "+videos);
+//            Log.d(TAG, "onViewCreated: "+videos);
             fillVideoDetails(videos);
         });
 
-        movieListViewModel.getReviews().observe(this,reviews -> {
-            Log.d(TAG, "onViewCreated: "+reviews);
+        movieListViewModel.getReviews().observe(this, reviews -> {
+//            Log.d(TAG, "onViewCreated: "+reviews);
             fillReviewDetails(reviews);
         });
     }
@@ -135,8 +141,8 @@ public class MovieDetailsFragment extends Fragment {
             this.trailersLayout.removeAllViews();
             LayoutInflater inflater = getActivity().getLayoutInflater();
 
-            for(Video video: videos){
-                View thumbnail = inflater.inflate(R.layout.video,this.trailersLayout,false);
+            for (Video video : videos) {
+                View thumbnail = inflater.inflate(R.layout.video, this.trailersLayout, false);
                 thumbnail.setOnClickListener(view -> {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getUrl()));
                     startActivity(intent);
@@ -145,31 +151,30 @@ public class MovieDetailsFragment extends Fragment {
                 Glide.with(this)
                         .load(video.getThumbnailUrl())
                         .into(videoThumbnail);
-                Log.d(TAG, "fillVideoDetails: "+video.getThumbnailUrl());
+                Log.d(TAG, "fillVideoDetails: " + video.getThumbnailUrl());
                 this.trailersLayout.addView(thumbnail);
             }
         }
     }
 
-    public void fillReviewDetails(List<Review> reviews){
-        if(reviews.isEmpty()){
+    public void fillReviewDetails(List<Review> reviews) {
+        if (reviews.isEmpty()) {
             reviewLabel.setVisibility(View.GONE);
             reviewLayout.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             reviewLabel.setVisibility(View.VISIBLE);
             reviewLayout.setVisibility(View.VISIBLE);
 
             this.reviewLayout.removeAllViews();
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            for(Review review: reviews){
-                View reviewView = inflater.inflate(R.layout.review,this.reviewLayout,false);
+            for (Review review : reviews) {
+                View reviewView = inflater.inflate(R.layout.review, this.reviewLayout, false);
                 TextView authorName = reviewView.findViewById(R.id.review_author);
                 TextView content = reviewView.findViewById(R.id.review_content);
                 content.setOnClickListener(view -> {
-                    if(content.getMaxLines() == 5 ){
+                    if (content.getMaxLines() == 5) {
                         content.setMaxLines(500);
-                   }else{
+                    } else {
                         content.setMaxLines(5);
                     }
                 });
@@ -178,6 +183,17 @@ public class MovieDetailsFragment extends Fragment {
                 this.reviewLayout.addView(reviewView);
             }
         }
+    }
+
+
+    public View.OnClickListener handleFavorite() {
+        return new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                movieListViewModel.addFavorite();
+            }
+        };
     }
 
 

@@ -18,8 +18,6 @@ public class Video {
     private String size;
     private String type;
 
-
-
     public String getId() {
         return id;
     }
@@ -68,21 +66,20 @@ public class Video {
         this.type = type;
     }
 
-    public String getUrl(){
-        if(SITE_YOUTUBE.equalsIgnoreCase(site)) {
-            Log.d(TAG, "getUrl: " +YOUTUBE_VIDEO_URL + videoId);
+    public String getUrl() {
+        if (SITE_YOUTUBE.equalsIgnoreCase(site)) {
+            Log.d(TAG, "getUrl: " + YOUTUBE_VIDEO_URL + videoId);
 //            return YOUTUBE_VIDEO_URL + videoId;
-            return String.format(YOUTUBE_VIDEO_URL,videoId);
-
+            return String.format(YOUTUBE_VIDEO_URL, videoId);
         }
         return "";
     }
 
-    public String getThumbnailUrl(){
-        if(SITE_YOUTUBE.equalsIgnoreCase(site)){
+    public String getThumbnailUrl() {
+        if (SITE_YOUTUBE.equalsIgnoreCase(site)) {
             Log.d(TAG, "getThumbnailUrl: " + YOUTUBE_THUMBNAIL_URL + videoId);
 //            return YOUTUBE_THUMBNAIL_URL + videoId;
-            return String.format(YOUTUBE_THUMBNAIL_URL,videoId);
+            return String.format(YOUTUBE_THUMBNAIL_URL, videoId);
         }
         return "";
     }

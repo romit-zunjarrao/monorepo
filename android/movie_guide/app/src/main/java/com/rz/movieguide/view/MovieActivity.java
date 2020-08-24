@@ -31,32 +31,32 @@ public class MovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie);
         setUpToolbar();
 
-        if(fragmentManager == null) {
+        if (fragmentManager == null) {
             fragmentManager = getSupportFragmentManager();
         }
 
-        if(fragmentManager.findFragmentById(R.id.fragment_container) == null){
+        if (fragmentManager.findFragmentById(R.id.fragment_container) == null) {
             MovieListFragment movieListFragment = new MovieListFragment();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container,movieListFragment).commit();
+            fragmentTransaction.add(R.id.fragment_container, movieListFragment).commit();
         }
 
         movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
-        movieListViewModel.getSelectedMovie().observe(this,movie -> openDetailsFragment());
+        movieListViewModel.getSelectedMovie().observe(this, movie -> openDetailsFragment());
     }
 
     public void openDetailsFragment() {
         MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,movieDetailsFragment).addToBackStack("temp").commit();
+        fragmentTransaction.replace(R.id.fragment_container, movieDetailsFragment).addToBackStack("temp").commit();
         toolbar.setVisibility(View.INVISIBLE);
     }
 
-    private void setUpToolbar(){
+    private void setUpToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("MovieGuide");
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
@@ -64,7 +64,7 @@ public class MovieActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 //        return super.onCreateOptionsMenu(menu);
         return true;
     }
@@ -87,13 +87,14 @@ public class MovieActivity extends AppCompatActivity {
                 item.setChecked(true);
                 movieListViewModel.setListType("newest");
                 return true;
-            case R.id.favorite:
-                Log.d(TAG, "onOptionsItemSelected: favorite movies selected");
-                item.setChecked(true);
-                movieListViewModel.setListType("favorite");
-                return true;
+//            case R.id.favorite:
+//                Log.d(TAG, "onOptionsItemSelected: favorite movies selected");
+//                item.setChecked(true);
+//                movieListViewModel.setListType("favorite");
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

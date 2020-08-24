@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rz.movieguide.R;
 
-public class MovieListViewHolder extends RecyclerView.ViewHolder{
-   View layout;
-   ImageView movieImage;
-   View titleBackground;
-   TextView movieTitle;
+public class MovieListViewHolder extends RecyclerView.ViewHolder {
+    View layout;
+    ImageView movieImage;
+    View titleBackground;
+    TextView movieTitle;
 
     public MovieListViewHolder(@NonNull View itemView) {
         super(itemView);

@@ -16,14 +16,14 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom"
         android:alpha="0.8"
-        android:background="@android:color/black"/>
+        android:background="@android:color/black" />
 
     <TextView
         android:id="@+id/movie_title_element"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="bottom"
+        android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:gravity="center"/>
+        android:textSize="12sp" />
 </FrameLayout>
