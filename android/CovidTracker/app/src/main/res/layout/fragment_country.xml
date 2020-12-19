@@ -6,10 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.CountryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is Country Fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.anychart.AnyChartView
+                android:id="@+id/country_pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.anychart.AnyChartView
+                android:id="@+id/country_line_chart"
+                android:layout_width="200dp"
+                android:layout_height="200dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

@@ -16,17 +16,5 @@
         android:id="@+id/tab_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/global_tab_item"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/country_tab_item"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.google.android.material.tabs.TabLayout>
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
