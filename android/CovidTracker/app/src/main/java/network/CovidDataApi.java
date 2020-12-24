@@ -16,5 +16,5 @@ public interface CovidDataApi {
     Call<CountryLatest[]> getLatestCountryData(@Query("name") String countryName);
 
     @GET("/report/country/name")
-    Call<CountryDaily> getDailyCountryData(@Query("date") String date, @Query("name") String countryName);
+    Call<CountryDaily[]> getDailyCountryData(@Query("date") String date, @Query("name") String countryName);
 }
