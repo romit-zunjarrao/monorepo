@@ -1,5 +1,6 @@
 package com.project.covidtracker.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,11 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.project.covidtracker.R;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import retrofit2.Retrofit;
 
 public class GlobalFragment extends Fragment {
 
-    private Pie pie;
+    private PieChart pieChart;
     private static final String TAG = "GlobalFragment";
 
     @Override
@@ -50,13 +51,9 @@ public class GlobalFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        pie = AnyChart.pie();
+        pieChart = view.findViewById(R.id.global_pie_chart);
         getGlobalLatestData();
-        AnyChartView globalPieView = (AnyChartView) view.findViewById(R.id.global_pie_chart);
-        globalPieView.setChart(pie);
     }
-
 
     private void getGlobalLatestData() {
         Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance(getActivity().getApplicationContext());
@@ -66,12 +63,19 @@ public class GlobalFragment extends Fragment {
             @Override
             public void onResponse(Call<GlobalLatest[]> call, Response<GlobalLatest[]> response) {
                 GlobalLatest[] globalLatest = response.body();
-                List<DataEntry> data = new ArrayList<>();
-                data.add(new ValueDataEntry("confirmed", globalLatest[0].getConfirmed()));
-                data.add(new ValueDataEntry("recovered", globalLatest[0].getRecovered()));
-                data.add(new ValueDataEntry("deaths", globalLatest[0].getDeaths()));
-                data.add(new ValueDataEntry("critical", globalLatest[0].getCritical()));
-                pie.data(data);
+                pieChart.invalidate();
+                List<PieEntry> pieEntries = new ArrayList();
+                pieEntries.add(new PieEntry(globalLatest[0].getConfirmed(), "Confirmed"));
+                pieEntries.add(new PieEntry(globalLatest[0].getCritical(), "Critical"));
+                pieEntries.add(new PieEntry(globalLatest[0].getRecovered(), "Recovered"));
+                pieEntries.add(new PieEntry(globalLatest[0].getDeaths(), "Deaths"));
+                PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+                PieData pieData = new PieData(pieDataSet);
+                pieChart.setData(pieData);
+                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                pieDataSet.setSliceSpace(2f);
+                pieDataSet.setValueTextColor(Color.WHITE);
+                pieDataSet.setValueTextSize(10f);
                 Log.d(TAG, "onResponse: GlobalLatest response" + response.toString());
                 Log.d(TAG, "onResponse: GlobalLatest response" + globalLatest);
             }

@@ -1,5 +1,6 @@
 package com.project.covidtracker.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,12 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.anychart.APIlib;
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.project.covidtracker.R;
 
 import java.util.ArrayList;
@@ -37,10 +37,8 @@ import retrofit2.Retrofit;
 
 public class CountryFragment extends Fragment {
 
-    private Pie pie;
-    private Pie line;
     private static final String TAG = "CountryFragment";
-    AnyChartView countryPieView, countryLineView;
+    PieChart countryPieView, countryLineView;
     EditText countryEditText;
     Button searchButton;
 
@@ -63,12 +61,12 @@ public class CountryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        countryPieView = (AnyChartView) view.findViewById(R.id.country_pie_chart);
-        countryLineView = (AnyChartView) view.findViewById(R.id.country_line_chart);
+        countryPieView = view.findViewById(R.id.country_pie_chart);
+        countryLineView = view.findViewById(R.id.country_line_chart);
         countryEditText = view.findViewById(R.id.country_edit_text);
         searchButton = view.findViewById(R.id.search_button);
-        searchButton.setOnClickListener((View v)->{
-            if(countryEditText.length() != 0){
+        searchButton.setOnClickListener((View v) -> {
+            if (countryEditText.length() != 0) {
                 searchCountry(countryEditText.getText().toString().trim());
             }
         });
@@ -84,14 +82,21 @@ public class CountryFragment extends Fragment {
             @Override
             public void onResponse(Call<CountryLatest[]> call, Response<CountryLatest[]> response) {
                 CountryLatest[] countryLatest = response.body();
-                List<DataEntry> data = new ArrayList<>();
-                Log.d(TAG, "onResponse: CountryLatest response" + response.body());
-                data.add(new ValueDataEntry("confirmed", countryLatest[0].getConfirmed()));
-                data.add(new ValueDataEntry("recovered", countryLatest[0].getRecovered()));
-                data.add(new ValueDataEntry("deaths", countryLatest[0].getDeaths()));
-                data.add(new ValueDataEntry("critical", countryLatest[0].getCritical()));
-                Log.d(TAG, "onResponse:  CountryName returned by API" +countryLatest[0].getCountry() + "\n"+  countryLatest[0].getConfirmed());
-                setCountryPieChart(data);
+                countryPieView.invalidate();
+
+                List<PieEntry> pieEntries = new ArrayList<>();
+                pieEntries.add(new PieEntry(countryLatest[0].getConfirmed(), "Confirmed"));
+                pieEntries.add(new PieEntry(countryLatest[0].getCritical(), "Critical"));
+                pieEntries.add(new PieEntry(countryLatest[0].getDeaths(), "Deaths"));
+                pieEntries.add(new PieEntry(countryLatest[0].getRecovered(), "Recovered"));
+                PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+                PieData pieData = new PieData(pieDataSet);
+                countryPieView.setData(pieData);
+                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                pieDataSet.setSliceSpace(2f);
+                pieDataSet.setValueTextColor(Color.WHITE);
+                pieDataSet.setValueTextSize(10f);
+                Log.d(TAG, "onResponse:  CountryName returned by API" + countryLatest[0].getCountry() + "\n" + countryLatest[0].getConfirmed());
             }
 
             @Override
@@ -111,15 +116,22 @@ public class CountryFragment extends Fragment {
             @Override
             public void onResponse(Call<CountryDaily[]> call, Response<CountryDaily[]> response) {
                 CountryDaily[] countryDaily = response.body();
-                List<DataEntry> data = new ArrayList<>();
                 Log.d(TAG, "onResponse: CountryDaily response" + response.body());
                 CountryDaily.Province province = countryDaily[0].getProvinces().get(0);
-                data.add(new ValueDataEntry("confirmed", province.getConfirmed()));
-                data.add(new ValueDataEntry("recovered", province.getRecovered()));
-                data.add(new ValueDataEntry("deaths", province.getDeaths()));
-                data.add(new ValueDataEntry("active", province.getActive()));
-                Log.d(TAG, "onResponse:  CountryName returned by API" +countryDaily[0].getCountry() + "\n" +province.getConfirmed());
-                setCountryLineChart(data);
+                countryLineView.invalidate();
+                List<PieEntry> pieEntries = new ArrayList<>();
+                pieEntries.add(new PieEntry(province.getConfirmed(), "Confirmed"));
+                pieEntries.add(new PieEntry(province.getRecovered(), "Recovered"));
+                pieEntries.add(new PieEntry(province.getDeaths(), "Deaths"));
+                pieEntries.add(new PieEntry(province.getActive(), "Active"));
+                PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+                PieData pieData = new PieData(pieDataSet);
+                countryLineView.setData(pieData);
+                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                pieDataSet.setSliceSpace(2f);
+                pieDataSet.setValueTextColor(Color.WHITE);
+                pieDataSet.setValueTextSize(10f);
+                Log.d(TAG, "onResponse:  CountryName returned by API" + countryDaily[0].getCountry() + "\n" + province.getConfirmed());
             }
 
             @Override
@@ -131,31 +143,11 @@ public class CountryFragment extends Fragment {
         });
     }
 
-    public void setCountryPieChart(List<DataEntry> data) {
-        new Handler(Looper.getMainLooper()).post(()->{
-            APIlib.getInstance().setActiveAnyChartView(countryPieView);
-            pie = AnyChart.pie();
-            pie.data(data);
-            Log.d(TAG, "setCountryLineChart: " + data.get(0).toString());
-            countryPieView.setChart(pie);
-        });
-    }
-
-    public void setCountryLineChart(List<DataEntry> data) {
-        new Handler(Looper.getMainLooper()).postDelayed(()-> {
-            APIlib.getInstance().setActiveAnyChartView(countryLineView);
-            line = AnyChart.pie();
-            line.data(data);
-            Log.d(TAG, "setCountryLineChart: " + data.get(0).getValue("confirmed"));
-            countryLineView.setChart(line);
-        },2000);
-    }
-
-    public void searchCountry(String countryName){
+    public void searchCountry(String countryName) {
         getCountryLatestData(countryName);
-        new Handler(Looper.getMainLooper()).postDelayed(()-> {
+        new Handler(Looper.getMainLooper()).post(() -> {
                     getCountryDailyData(countryName);
-                },2000
+                }
         );
     }
 }

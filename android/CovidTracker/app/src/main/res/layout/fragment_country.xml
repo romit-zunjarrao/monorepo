@@ -9,7 +9,6 @@
     android:weightSum="10"
     tools:context=".ui.CountryFragment">
 
-
     <EditText
         android:id="@+id/country_edit_text"
         android:layout_width="match_parent"
@@ -37,28 +36,25 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:cardBackgroundColor="@color/cardview_light_background">
+                android:layout_height="400dp">
 
-                <com.anychart.AnyChartView
+                <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/country_pie_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:cardBackgroundColor="@color/colorAccent">
+                android:layout_height="400dp">
 
-                <com.anychart.AnyChartView
+                <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/country_line_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent" />
             </androidx.cardview.widget.CardView>
-
-
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>
