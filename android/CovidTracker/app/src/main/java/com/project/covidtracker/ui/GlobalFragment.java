@@ -52,6 +52,7 @@ public class GlobalFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         pieChart = view.findViewById(R.id.global_pie_chart);
+        pieChart.setCenterText("Global");
         getGlobalLatestData();
     }
 
@@ -63,7 +64,6 @@ public class GlobalFragment extends Fragment {
             @Override
             public void onResponse(Call<GlobalLatest[]> call, Response<GlobalLatest[]> response) {
                 GlobalLatest[] globalLatest = response.body();
-                pieChart.invalidate();
                 List<PieEntry> pieEntries = new ArrayList();
                 pieEntries.add(new PieEntry(globalLatest[0].getConfirmed(), "Confirmed"));
                 pieEntries.add(new PieEntry(globalLatest[0].getCritical(), "Critical"));
@@ -76,6 +76,7 @@ public class GlobalFragment extends Fragment {
                 pieDataSet.setSliceSpace(2f);
                 pieDataSet.setValueTextColor(Color.WHITE);
                 pieDataSet.setValueTextSize(10f);
+                pieChart.invalidate();
                 Log.d(TAG, "onResponse: GlobalLatest response" + response.toString());
                 Log.d(TAG, "onResponse: GlobalLatest response" + globalLatest);
             }

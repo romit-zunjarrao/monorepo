@@ -9,12 +9,29 @@
     android:weightSum="10"
     tools:context=".ui.CountryFragment">
 
-    <EditText
-        android:id="@+id/country_edit_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Country" />
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <EditText
+            android:id="@+id/country_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:hint="Country" />
+
+        <EditText
+            android:id="@+id/date_picker_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:inputType="none"
+            android:clickable="true"
+            />
+    </LinearLayout>
 
     <Button
         android:id="@+id/search_button"
@@ -36,7 +53,12 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="400dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="0.7dp"
+                app:cardMaxElevation="1dp"
+                app:contentPadding="10dp">
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/country_pie_chart"
@@ -47,7 +69,13 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="400dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="0.7dp"
+                app:cardMaxElevation="1dp"
+                app:contentPadding="10dp"
+                app:contentPaddingBottom="5dp">
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/country_line_chart"
